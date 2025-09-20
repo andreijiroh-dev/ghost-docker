@@ -158,7 +158,7 @@ services:
 volumes:
   ghost_content_dir:
     external: true
-    name: personal-ghost-data-personal
+    name: ghost-data-personal
   tinybird_files:
   tinybird_home:
   traffic_analytics_data:

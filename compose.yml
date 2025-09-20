@@ -89,6 +89,8 @@ services:
     build:
       context: ./tinybird
       dockerfile: Dockerfile
+      tags:
+        - ghcr.io/andreijiroh-dev/ghost-docker/tinybird-login:localdev
     working_dir: /home/tinybird
     command: /usr/local/bin/tinybird-login
     volumes:
@@ -151,9 +153,6 @@ services:
     networks:
       - ghost_network
       - lairland
-    depends_on:
-      db:
-        condition: service_healthy
     profiles: [activitypub]
     restart: no
 

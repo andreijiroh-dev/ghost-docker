@@ -15,10 +15,10 @@ services:
       url: https://${DOMAIN:?DOMAIN environment variable is required}
       admin__url: ${ADMIN_DOMAIN:+https://${ADMIN_DOMAIN}}
       database__client: mysql
-      database__connection__host: db
+      database__connection__host: ${DATABASE_HOST:-db}
       database__connection__user: ${DATABASE_USER:-ghost}
       database__connection__password: ${DATABASE_PASSWORD:?DATABASE_PASSWORD environment variable is required}
-      database__connection__database: ghost
+      database__connection__database: ${DATABASE_NAME:-ghost}
       tinybird__tracker__endpoint: https://${DOMAIN:?DOMAIN environment variable is required}/.ghost/analytics/api/v1/page_hit
       tinybird__adminToken: ${TINYBIRD_ADMIN_TOKEN:-}
       tinybird__workspaceId: ${TINYBIRD_WORKSPACE_ID:-}

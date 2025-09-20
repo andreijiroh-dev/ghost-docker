@@ -1,7 +1,12 @@
-# Ghost Docker
+# Ghost Docker on [Hack Club Nest](https://hackclub.app)
 
-Configuration to run Ghost and its services with Docker Compose
+Ghost configuration for my personal blog, hosted on [Hack Club Nest](https://hackclub.app).
 
-# Copyright & License 
+## Difference from upstream
 
-Copyright (c) 2013-2025 Ghost Foundation - Released under the [MIT license](LICENSE).
+- Support for `DATABASE_HOST` environment variable to allow using external databases (or reusing the same MySQL database container with some Docker networking magic).
+- Use of [`dotenvx`](https://github.com/dotenvx/dotenvx) for Git-based secret management.
+
+## License
+
+MIT

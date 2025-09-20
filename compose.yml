@@ -5,7 +5,7 @@ services:
     # Do not alter this without updating the Tinybird Sync container as well
     image: ghost:${GHOST_VERSION:-6-alpine}
     restart: always
-    expose:
+    ports:
       - "${GHOST_PORT:-2368}:2368"
     # This is required to import current config when migrating
     env_file:
@@ -61,8 +61,8 @@ services:
   activitypub:
     image: ghcr.io/tryghost/activitypub:1.1.0@sha256:39c212fe23603b182d68e67d555c6b9b04b1e57459dfc0bef26d6e4980eb04d1
     restart: always
-    expose:
-      - "8080"
+    ports:
+      - "35699:8080"
     volumes:
       - ${UPLOAD_LOCATION:-./data/ghost}:/opt/activitypub/content
     environment:

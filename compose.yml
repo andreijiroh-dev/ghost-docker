@@ -27,8 +27,6 @@ services:
     volumes:
       - ghost_content_dir:/var/lib/ghost/content
     depends_on:
-      db:
-        condition: service_healthy
       tinybird-sync:
         condition: service_completed_successfully
         required: false
@@ -40,6 +38,7 @@ services:
         required: false
     networks:
       - ghost_network
+      - lairland
 
   traffic-analytics:
     image: ghost/traffic-analytics:1.0.15@sha256:8d98e9f4eb623d1c7953d5a60b944db1850bc61ac4a6f637055d05b4a2be798f
@@ -70,20 +69,19 @@ services:
       # See https://github.com/TryGhost/ActivityPub/blob/main/docs/env-vars.md
       NODE_ENV: production
       ACTIVITYPUB_COLLECTION_PAGE_SIZE: 20
-      MYSQL_HOST: db
+      MYSQL_HOST: ${DATABASE_HOST:-db}
       MYSQL_USER: ${DATABASE_USER:-ghost}
       MYSQL_PASSWORD: ${DATABASE_PASSWORD:?DATABASE_PASSWORD environment variable is required}
       MYSQL_DATABASE: activitypub
       LOCAL_STORAGE_PATH: /opt/activitypub/content/images/activitypub
       LOCAL_STORAGE_HOSTING_URL: https://${DOMAIN}/content/images/activitypub
     depends_on:
-      db:
-        condition: service_healthy
       activitypub-migrate:
         condition: service_completed_successfully
     profiles: [activitypub]
     networks:
       - ghost_network
+      - lairland
 
   # Suporting Services
 

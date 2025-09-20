@@ -1,25 +1,6 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/main/schema/compose-spec.json
 services:
-  caddy:
-    image: caddy:2.10.0-alpine@sha256:e2e3a089760c453bc51c4e718342bd7032d6714f15b437db7121bfc2de2654a6
-    restart: always
-    ports:
-      - "80:80"
-      - "443:443"
-    environment:
-      DOMAIN: ${DOMAIN:?DOMAIN environment variable is required}
-      ADMIN_DOMAIN: ${ADMIN_DOMAIN:-}
-      ACTIVITYPUB_TARGET: ${ACTIVITYPUB_TARGET:-https://ap.ghost.org}
-    volumes:
-      - ./caddy:/etc/caddy
-      - caddy_data:/data
-      - caddy_config:/config
-    depends_on:
-      - ghost
-    networks:
-      - ghost_network
-
   ghost:
     # Do not alter this without updating the Tinybird Sync container as well
     image: ghost:${GHOST_VERSION:-6-alpine}
@@ -44,7 +25,7 @@ services:
       tinybird__tracker__datasource: analytics_events
       tinybird__stats__endpoint: ${TINYBIRD_API_URL:-https://api.tinybird.co}
     volumes:
-      - ${UPLOAD_LOCATION:-./data/ghost}:/var/lib/ghost/content
+      - ghost_content_dir:/var/lib/ghost/content
     depends_on:
       db:
         condition: service_healthy
@@ -57,29 +38,6 @@ services:
       activitypub:
         condition: service_started
         required: false
-    networks:
-      - ghost_network
-
-  db:
-    image: mysql:8.0.42@sha256:4445b2668d41143cb50e471ee207f8822006249b6859b24f7e12479684def5d9
-    restart: always
-    expose:
-      - "3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD:?DATABASE_ROOT_PASSWORD environment variable is required}
-      MYSQL_USER: ${DATABASE_USER:-ghost}
-      MYSQL_PASSWORD: ${DATABASE_PASSWORD:?DATABASE_PASSWORD environment variable is required}
-      MYSQL_DATABASE: ghost
-      MYSQL_MULTIPLE_DATABASES: activitypub
-    volumes:
-      - ${MYSQL_DATA_LOCATION:-./data/mysql}:/var/lib/mysql
-      - ./mysql-init:/docker-entrypoint-initdb.d
-    healthcheck:
-      test: mysqladmin ping -p$$MYSQL_ROOT_PASSWORD -h 127.0.0.1
-      interval: 1s
-      start_period: 30s
-      start_interval: 10s
-      retries: 120
     networks:
       - ghost_network
 
@@ -200,11 +158,15 @@ services:
     restart: no
 
 volumes:
-  caddy_data:
-  caddy_config:
+  ghost_content_dir:
+    external: true
+    name: personal-ghost-data-personal
   tinybird_files:
   tinybird_home:
   traffic_analytics_data:
 
 networks:
   ghost_network:
+  lairland:
+    external: true
+    name: personal-infra

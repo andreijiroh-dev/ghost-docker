@@ -73,3 +73,5 @@ typings/
 
 # Where we store docker data by default
 data
+
+.env.keys

@@ -41,7 +41,7 @@ services:
       - lairland
 
   traffic-analytics:
-    image: ghost/traffic-analytics:1.0.15@sha256:8d98e9f4eb623d1c7953d5a60b944db1850bc61ac4a6f637055d05b4a2be798f
+    image: ghost/traffic-analytics:1.0.20@sha256:a72573d89457e778b00e9061422516d2d266d79a72a0fc02005ba6466e391859
     restart: always
     expose:
       - "3000"
@@ -83,7 +83,7 @@ services:
       - ghost_network
       - lairland
 
-  # Suporting Services
+  # Supporting Services
 
   tinybird-login:
     build:
